@@ -1,0 +1,5 @@
+---show all list---
+bcdedit /enum firmware 
+
+---delete item---
+bcdedit /delete {identifire}
