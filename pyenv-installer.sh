@@ -114,10 +114,10 @@ done_message(){
     echo
 
     colorize 93 "At the beginning of the ${HOME}/.bashrc file were added these lines:"
-    echo '    export PYENV_ROOT="$HOME/.pyenv"'
-    echo '    export PATH="$PYENV_ROOT/bin:$PATH"'
-    echo '    eval "$(pyenv init --path)"'
-    echo '    eval "$(pyenv virtualenv-init -)"'
+    echo 'export PYENV_ROOT="$HOME/.pyenv"'
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"'
+    echo 'eval "$(pyenv init --path)"'
+    echo 'eval "$(pyenv virtualenv-init -)"'
     echo
 
     echo "To uninstall Pyenv just delete them from ${HOME}/.bashrc file, and"
