@@ -3,7 +3,7 @@
 To install Pyenv on your Ubuntu-based distro just execute this command in shell:
 
 ```bash
-curl -o- https://raw.githubusercontent.com/MehediBijoy/system-configure/main/pyenv-installer.sh | bash
+bash <(curl -sSL https://raw.githubusercontent.com/MehediBijoy/system-configure/main/pyenv-installer.sh)
 ```
 
 After the installation will be completed the script will automatically add these lines at the beginning of your `.bashrc` file, and will restart your shell:
