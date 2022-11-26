@@ -85,8 +85,6 @@ install_pyenv(){
     a \
     eval "$(pyenv init --path)"
     a \
-    eval "$(pyenv virtualenv-init -)"
-    a \
     \n
     ' -e ':a' -e '$!{n;ba};}' ~/.bashrc
     echo
@@ -117,7 +115,6 @@ done_message(){
     echo 'export PYENV_ROOT="$HOME/.pyenv"'
     echo 'export PATH="$PYENV_ROOT/bin:$PATH"'
     echo 'eval "$(pyenv init --path)"'
-    echo 'eval "$(pyenv virtualenv-init -)"'
     echo
 
     echo "To uninstall Pyenv just delete them from ${HOME}/.bashrc file, and"
