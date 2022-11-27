@@ -12,5 +12,10 @@ After the installation will be completed the script will automatically add these
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
-eval "$(pyenv virtualenv-init -)"
+```
+
+### Install Operator Mono Lig Font
+A custom font using Operator Mono and Fira-Code styled ligatures.
+```bash
+Operator Mono Lig
 ```
