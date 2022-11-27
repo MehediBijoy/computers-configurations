@@ -12,25 +12,16 @@ echo
 colorize 33 "Ubuntu Pyenv Installer"
 
 current_version=`python3 -V | grep -Eo '([0-9]{1,3}[\.]){2}[0-9]{1,3}'`
-echo "  The current Python version is: ${current_version} (system)"
+echo "The current Python version is: ${current_version} (system)"
 
 python_version=`curl --silent https://www.python.org/downloads/ \
                 | grep https://www.python.org/ftp/python/ \
                 | grep -Eo '([0-9]{1,3}[\.]){2}[0-9]{1,3}' \
                 | head -1`
 
-echo "  The latest Python version is: ${python_version}"
+echo "The latest Python version is: ${python_version}"
 echo
 
-colorize 33 "What should I do?"
-
-echo "  1. Install Pyenv only"
-echo "  2. Install Pyenv, and the latest Python version ($python_version)"
-echo "  3. Install Pyenv, the latest Python ($python_version), and set it as the global version"
-echo
-
-read -p "Make your choice (1, 2 or 3): " answer
-echo
 
 apt_update(){
     colorize 92 "Updating system packages lists"
@@ -38,8 +29,11 @@ apt_update(){
     echo
 }
 
-create_symlink_to_python3(){
-    sudo ln -s /usr/bin/python3 /usr/bin/python
+python_package_manager_install() {
+    colorize 92 "pip and pipenv install"
+    sudo apt install -y python3-pip
+    sudo pip install pipenv
+    colorize 92 "pip and pipenv install done!"
 }
 
 install_python_dependencies() {
@@ -62,7 +56,7 @@ install_python_dependencies() {
         libxmlsec1-dev \
         libffi-dev \
         liblzma-dev
-    echo
+    colorize 92 "Python build dependencies installed!"
 }
 
 install_git(){
@@ -71,27 +65,28 @@ install_git(){
     echo
 }
 
+write_pyenv_config() {
+    echo >> $1
+    echo "# Pyenv configuration">> $1
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> $1
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> $1
+    echo 'eval "$(pyenv init -)"' >> $1
+    echo >> $1
+}
+
 install_pyenv(){
     colorize 92 'Installing Pyenv'
     curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
     echo
 
-    colorize 92 'Writing Pyenv config to ./bashrc file'
+    colorize 92 'Writing Pyenv config to ./bashrc and ./zshrc file'
+    [ -f ~/.bashrc ] && write_pyenv_config ~/.bashrc
+    [ -f ~/.zshrc ] && write_pyenv_config ~/.zshrc
+    colorize 92 'configuration written done!'
+}
 
-    sed -Ei -e '/^([^#]|$)/ {a \
-    export PYENV_ROOT="$HOME/.pyenv"
-    a \
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    a \
-    eval "$(pyenv init --path)"
-    a \
-    \n
-    ' -e ':a' -e '$!{n;ba};}' ~/.bashrc
-    echo
-
-    colorize 92 "Reloading ./bashrc"
-    source ~/.bashrc
-    echo
+create_symlink_to_python3(){
+    sudo ln -s /usr/bin/python3 /usr/bin/python
 }
 
 install_python(){
@@ -102,6 +97,7 @@ install_python(){
 set_python_global(){
     colorize 92 "Setting Python $python_version as global version"
     pyenv global $python_version
+    colorize 92 "Python $python_version successfull set global version"
 }
 
 restart_current_shell(){
@@ -110,44 +106,27 @@ restart_current_shell(){
 
 done_message(){
     echo
-
-    colorize 93 "At the beginning of the ${HOME}/.bashrc file were added these lines:"
-    echo 'export PYENV_ROOT="$HOME/.pyenv"'
-    echo 'export PATH="$PYENV_ROOT/bin:$PATH"'
-    echo 'eval "$(pyenv init --path)"'
-    echo
-
+    echo "Installed successfully"
     echo "To uninstall Pyenv just delete them from ${HOME}/.bashrc file, and"
     echo "then delete ${PYENV_ROOT} directory"
-    echo
-
     echo 'Done!'
 }
 
 install_minimum(){
     apt_update
-    install_python_dependencies
     install_git
+    python_package_manager_install
+    install_python_dependencies
     install_pyenv
     create_symlink_to_python3
 }
 
-if [[ $answer == '1' ]]; then
-    install_minimum
-    done_message
-    restart_current_shell
-elif [[ $answer == '2' ]]; then
-    install_minimum
-    install_python
-    done_message
-    restart_current_shell
-elif [[ $answer == '3' ]]; then
+if [ ! -d ~/.pyenv ];  then 
     install_minimum
     install_python
     set_python_global
     done_message
     restart_current_shell
 else
-    echo "Invalid input. Try again"
-    exit 0
+    echo "Pyenv already installed"
 fi
