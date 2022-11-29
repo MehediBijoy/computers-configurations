@@ -82,6 +82,7 @@ install_pyenv(){
     colorize 92 'Writing Pyenv config to ./bashrc and ./zshrc file'
     [ -f ~/.bashrc ] && write_pyenv_config ~/.bashrc
     [ -f ~/.zshrc ] && write_pyenv_config ~/.zshrc
+    source ~/.bashrc
     colorize 92 'configuration written done!'
 }
 
