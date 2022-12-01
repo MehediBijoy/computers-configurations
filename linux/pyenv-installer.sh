@@ -8,7 +8,6 @@ colorize() {
     fi
 }
 
-echo
 colorize 33 "Ubuntu Pyenv Installer"
 
 current_version=`python3 -V | grep -Eo '([0-9]{1,3}[\.]){2}[0-9]{1,3}'`
@@ -65,23 +64,15 @@ install_git(){
     echo
 }
 
-write_pyenv_config() {
-    echo >> $1
-    echo "# Pyenv configuration">> $1
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> $1
-    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> $1
-    echo 'eval "$(pyenv init -)"' >> $1
-    echo >> $1
-}
-
 install_pyenv(){
     colorize 92 'Installing Pyenv'
     curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
     echo
 
-    colorize 92 'Writing Pyenv config to ./bashrc and ./zshrc file'
-    [ -f ~/.bashrc ] && write_pyenv_config ~/.bashrc
-    [ -f ~/.zshrc ] && write_pyenv_config ~/.zshrc
+    colorize 92 'Writing Pyenv config to ./bashrc file'
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+    echo 'eval "$(pyenv init -)"' >> ~/.bashrc
     source ~/.bashrc
     colorize 92 'configuration written done!'
 }
