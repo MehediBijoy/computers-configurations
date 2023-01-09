@@ -74,6 +74,7 @@ install_pyenv(){
     echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
     echo 'eval "$(pyenv init -)"' >> ~/.bashrc
     source ~/.bashrc
+    bash
     colorize 92 'configuration written done!'
 }
 
